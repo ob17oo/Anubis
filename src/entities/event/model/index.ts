@@ -1,0 +1,1 @@
+export type { TEvent } from './types/event.types'

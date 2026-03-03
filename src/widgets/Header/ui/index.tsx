@@ -4,15 +4,14 @@ import Image from "next/image";
 
 export function HeaderComp(){
     return (
-        <header className="w-full h-22.5">
+        <header className="w-full h-25.5">
             <div className="h-full flex items-center justify-between gap-10">
-                <div className="w-fit flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#FF5100]"></div>
-                    <h2 className="text-4xl text-[#FF5100] font-bold">Anubis</h2>
+                <div className="w-fit">
+                    <Image width={250} height={100} src={'/static/icons/AnubisLogotype.svg'} alt="HeaderLogotype"/>
                 </div>
                 <div className="w-full flex items-center justify-between">
                     <div className="max-w-90 w-full">
-                        <InputComp value="Поиск" icon="/static/icons/search.svg"/>
+                        <InputComp label="Поиск" icon="/static/icons/search.svg"/>
                     </div>
                     <div className="flex items-center gap-6">
                         <button className="flex items-center gap-1.5 cursor-pointer">

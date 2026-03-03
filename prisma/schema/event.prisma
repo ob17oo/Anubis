@@ -1,5 +1,31 @@
+enum EventType {
+    cinema
+    concert
+    kids
+    standup
+    theater
+    sport
+}
 model Event {
-    id Int @id @default(autoincrement())
+    id String @id @default(cuid())
     title String
     description String
+    imageUrl String @map("image_url")
+    
+    location String @default("Ростов-на-Дону") @map("event_location")
+    date DateTime @map("event_date")
+    price Int
+    ticketAmount Int @default(100) @map("ticket_amount")
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime? @updatedAt() @map("updated_at")
+
+    genre EventType @default(concert) 
+    rating Float @default(0)
+
+    @@map("events")
+
+    @@index([createdAt])
+    @@index([date])
+    @@index([price])
 }

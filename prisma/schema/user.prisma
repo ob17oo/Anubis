@@ -1,0 +1,17 @@
+enum USER_ROLE {
+    ADMIN
+    USER
+    MODERATOR
+}
+
+model User {
+    id String @id @default(cuid())
+    userName String @map("user_name")
+    password String
+    email String @unique
+    imageUrl String @map("image_url") @default("/")
+    role USER_ROLE @default(USER) 
+
+    @@index([role])
+    @@index([email])
+}
