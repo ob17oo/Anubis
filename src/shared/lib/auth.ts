@@ -68,6 +68,8 @@ export const authOption: NextAuthOptions = {
                             imageUrl: true,
                             email: true,
                             role: true,
+                            cityId: true,
+                            city: true
                         }
                     })
 
@@ -114,7 +116,9 @@ export const authOption: NextAuthOptions = {
                 token.userName = user.userName;
                 token.email = user.email;
                 token.imageUrl = user.imageUrl;
-                token.role = user.role
+                token.role = user.role;
+                token.cityId = user.cityId;
+                token.city = user.city;
             }            
             return token;
         },
@@ -126,6 +130,8 @@ export const authOption: NextAuthOptions = {
                 session.user.email = token.email
                 session.user.imageUrl = token.imageUrl
                 session.user.role = token.role
+                session.user.cityId = token.cityId
+                session.user.city = token.city
             }
             return session
         }

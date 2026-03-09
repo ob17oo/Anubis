@@ -1,1 +1,1 @@
-export { GetAllEvents } from './getAllEvents'
+export { getAllEvents } from './getiEvents.api'

@@ -30,6 +30,8 @@ export async function RegisterAction(data: {
             }
         })
 
+        return { success: true }
+
     } catch(error: unknown){
         if(process.env.NODE_ENV === 'development'){
             console.log(`Error creating user: ${error}`)
@@ -42,5 +44,4 @@ export async function RegisterAction(data: {
         }
         throw new Error('Произошла ошибка при регистрации. Повторите позже')
     }
-    redirect('/login')
 }

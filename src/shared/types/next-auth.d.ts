@@ -1,3 +1,4 @@
+import { TUserCity } from '@/entities/city/model/city.types'
 import { DefaultSession } from 'next-auth'
 
 declare module 'next-auth' {
@@ -6,8 +7,10 @@ declare module 'next-auth' {
             id: string,
             email: string,
             userName: string,
+            cityId: string,
             imageUrl: string,
-            role: string
+            role: string,
+            city: TUserCity
         } & DefaultSession['user']
     } 
 
@@ -15,8 +18,10 @@ declare module 'next-auth' {
         id: string,
         email: string,
         userName: string,
+        cityId: string,
         imageUrl: string,
-        role: string
+        role: string,
+        city: TUserCity
     }
 }
 
@@ -25,7 +30,9 @@ declare module 'next-auth/jwt' {
         id: string,
         email: string,
         userName: string,
+        cityId: string,
         imageUrl: string,
-        role: string
+        role: string,
+        city: TUserCity
     }
 }

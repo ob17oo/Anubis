@@ -28,6 +28,7 @@ export type UserMinAggregateOutputType = {
   id: string | null
   userName: string | null
   password: string | null
+  cityId: string | null
   email: string | null
   imageUrl: string | null
   role: $Enums.USER_ROLE | null
@@ -37,6 +38,7 @@ export type UserMaxAggregateOutputType = {
   id: string | null
   userName: string | null
   password: string | null
+  cityId: string | null
   email: string | null
   imageUrl: string | null
   role: $Enums.USER_ROLE | null
@@ -46,6 +48,7 @@ export type UserCountAggregateOutputType = {
   id: number
   userName: number
   password: number
+  cityId: number
   email: number
   imageUrl: number
   role: number
@@ -57,6 +60,7 @@ export type UserMinAggregateInputType = {
   id?: true
   userName?: true
   password?: true
+  cityId?: true
   email?: true
   imageUrl?: true
   role?: true
@@ -66,6 +70,7 @@ export type UserMaxAggregateInputType = {
   id?: true
   userName?: true
   password?: true
+  cityId?: true
   email?: true
   imageUrl?: true
   role?: true
@@ -75,6 +80,7 @@ export type UserCountAggregateInputType = {
   id?: true
   userName?: true
   password?: true
+  cityId?: true
   email?: true
   imageUrl?: true
   role?: true
@@ -157,6 +163,7 @@ export type UserGroupByOutputType = {
   id: string
   userName: string
   password: string
+  cityId: string
   email: string
   imageUrl: string
   role: $Enums.USER_ROLE
@@ -187,18 +194,22 @@ export type UserWhereInput = {
   id?: Prisma.StringFilter<"User"> | string
   userName?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
+  cityId?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   imageUrl?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumUSER_ROLEFilter<"User"> | $Enums.USER_ROLE
+  city?: Prisma.XOR<Prisma.CityScalarRelationFilter, Prisma.CityWhereInput>
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userName?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  cityId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  city?: Prisma.CityOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -209,14 +220,17 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   userName?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
+  cityId?: Prisma.StringFilter<"User"> | string
   imageUrl?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumUSER_ROLEFilter<"User"> | $Enums.USER_ROLE
+  city?: Prisma.XOR<Prisma.CityScalarRelationFilter, Prisma.CityWhereInput>
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userName?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  cityId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -232,6 +246,7 @@ export type UserScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   userName?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
+  cityId?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   imageUrl?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumUSER_ROLEWithAggregatesFilter<"User"> | $Enums.USER_ROLE
@@ -244,12 +259,14 @@ export type UserCreateInput = {
   email: string
   imageUrl?: string
   role?: $Enums.USER_ROLE
+  city?: Prisma.CityCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: string
   userName: string
   password: string
+  cityId?: string
   email: string
   imageUrl?: string
   role?: $Enums.USER_ROLE
@@ -262,12 +279,14 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUSER_ROLEFieldUpdateOperationsInput | $Enums.USER_ROLE
+  city?: Prisma.CityUpdateOneRequiredWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userName?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  cityId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUSER_ROLEFieldUpdateOperationsInput | $Enums.USER_ROLE
@@ -277,6 +296,7 @@ export type UserCreateManyInput = {
   id?: string
   userName: string
   password: string
+  cityId?: string
   email: string
   imageUrl?: string
   role?: $Enums.USER_ROLE
@@ -295,15 +315,27 @@ export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userName?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  cityId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUSER_ROLEFieldUpdateOperationsInput | $Enums.USER_ROLE
+}
+
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userName?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  cityId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -313,6 +345,7 @@ export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userName?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  cityId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -322,13 +355,149 @@ export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userName?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  cityId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
 }
 
+export type UserCreateNestedManyWithoutCityInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCityInput, Prisma.UserUncheckedCreateWithoutCityInput> | Prisma.UserCreateWithoutCityInput[] | Prisma.UserUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCityInput | Prisma.UserCreateOrConnectWithoutCityInput[]
+  createMany?: Prisma.UserCreateManyCityInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutCityInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCityInput, Prisma.UserUncheckedCreateWithoutCityInput> | Prisma.UserCreateWithoutCityInput[] | Prisma.UserUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCityInput | Prisma.UserCreateOrConnectWithoutCityInput[]
+  createMany?: Prisma.UserCreateManyCityInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateManyWithoutCityNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCityInput, Prisma.UserUncheckedCreateWithoutCityInput> | Prisma.UserCreateWithoutCityInput[] | Prisma.UserUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCityInput | Prisma.UserCreateOrConnectWithoutCityInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutCityInput | Prisma.UserUpsertWithWhereUniqueWithoutCityInput[]
+  createMany?: Prisma.UserCreateManyCityInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutCityInput | Prisma.UserUpdateWithWhereUniqueWithoutCityInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutCityInput | Prisma.UserUpdateManyWithWhereWithoutCityInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutCityNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCityInput, Prisma.UserUncheckedCreateWithoutCityInput> | Prisma.UserCreateWithoutCityInput[] | Prisma.UserUncheckedCreateWithoutCityInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCityInput | Prisma.UserCreateOrConnectWithoutCityInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutCityInput | Prisma.UserUpsertWithWhereUniqueWithoutCityInput[]
+  createMany?: Prisma.UserCreateManyCityInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutCityInput | Prisma.UserUpdateWithWhereUniqueWithoutCityInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutCityInput | Prisma.UserUpdateManyWithWhereWithoutCityInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
 export type EnumUSER_ROLEFieldUpdateOperationsInput = {
   set?: $Enums.USER_ROLE
+}
+
+export type UserCreateWithoutCityInput = {
+  id?: string
+  userName: string
+  password: string
+  email: string
+  imageUrl?: string
+  role?: $Enums.USER_ROLE
+}
+
+export type UserUncheckedCreateWithoutCityInput = {
+  id?: string
+  userName: string
+  password: string
+  email: string
+  imageUrl?: string
+  role?: $Enums.USER_ROLE
+}
+
+export type UserCreateOrConnectWithoutCityInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCityInput, Prisma.UserUncheckedCreateWithoutCityInput>
+}
+
+export type UserCreateManyCityInputEnvelope = {
+  data: Prisma.UserCreateManyCityInput | Prisma.UserCreateManyCityInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithWhereUniqueWithoutCityInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCityInput, Prisma.UserUncheckedUpdateWithoutCityInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCityInput, Prisma.UserUncheckedCreateWithoutCityInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutCityInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCityInput, Prisma.UserUncheckedUpdateWithoutCityInput>
+}
+
+export type UserUpdateManyWithWhereWithoutCityInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutCityInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  id?: Prisma.StringFilter<"User"> | string
+  userName?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringFilter<"User"> | string
+  cityId?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  imageUrl?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumUSER_ROLEFilter<"User"> | $Enums.USER_ROLE
+}
+
+export type UserCreateManyCityInput = {
+  id?: string
+  userName: string
+  password: string
+  email: string
+  imageUrl?: string
+  role?: $Enums.USER_ROLE
+}
+
+export type UserUpdateWithoutCityInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userName?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUSER_ROLEFieldUpdateOperationsInput | $Enums.USER_ROLE
+}
+
+export type UserUncheckedUpdateWithoutCityInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userName?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUSER_ROLEFieldUpdateOperationsInput | $Enums.USER_ROLE
+}
+
+export type UserUncheckedUpdateManyWithoutCityInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userName?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUSER_ROLEFieldUpdateOperationsInput | $Enums.USER_ROLE
 }
 
 
@@ -337,47 +506,66 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   userName?: boolean
   password?: boolean
+  cityId?: boolean
   email?: boolean
   imageUrl?: boolean
   role?: boolean
+  city?: boolean | Prisma.CityDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userName?: boolean
   password?: boolean
+  cityId?: boolean
   email?: boolean
   imageUrl?: boolean
   role?: boolean
+  city?: boolean | Prisma.CityDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userName?: boolean
   password?: boolean
+  cityId?: boolean
   email?: boolean
   imageUrl?: boolean
   role?: boolean
+  city?: boolean | Prisma.CityDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
   id?: boolean
   userName?: boolean
   password?: boolean
+  cityId?: boolean
   email?: boolean
   imageUrl?: boolean
   role?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userName" | "password" | "email" | "imageUrl" | "role", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userName" | "password" | "cityId" | "email" | "imageUrl" | "role", ExtArgs["result"]["user"]>
+export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  city?: boolean | Prisma.CityDefaultArgs<ExtArgs>
+}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  city?: boolean | Prisma.CityDefaultArgs<ExtArgs>
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  city?: boolean | Prisma.CityDefaultArgs<ExtArgs>
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
-  objects: {}
+  objects: {
+    city: Prisma.$CityPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userName: string
     password: string
+    cityId: string
     email: string
     imageUrl: string
     role: $Enums.USER_ROLE
@@ -775,6 +963,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  city<T extends Prisma.CityDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CityDefaultArgs<ExtArgs>>): Prisma.Prisma__CityClient<runtime.Types.Result.GetResult<Prisma.$CityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -807,6 +996,7 @@ export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly userName: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly cityId: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly imageUrl: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'USER_ROLE'>
@@ -827,6 +1017,10 @@ export type UserFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which User to fetch.
    */
   where: Prisma.UserWhereUniqueInput
@@ -845,6 +1039,10 @@ export type UserFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which User to fetch.
    */
   where: Prisma.UserWhereUniqueInput
@@ -862,6 +1060,10 @@ export type UserFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * Filter, which User to fetch.
    */
@@ -911,6 +1113,10 @@ export type UserFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which User to fetch.
    */
   where?: Prisma.UserWhereInput
@@ -959,6 +1165,10 @@ export type UserFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which Users to fetch.
    */
   where?: Prisma.UserWhereInput
@@ -1002,6 +1212,10 @@ export type UserCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * The data needed to create a User.
    */
   data: Prisma.XOR<Prisma.UserCreateInput, Prisma.UserUncheckedCreateInput>
@@ -1035,6 +1249,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1049,6 +1267,10 @@ export type UserUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * The data needed to update a User.
    */
@@ -1101,6 +1323,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1115,6 +1341,10 @@ export type UserUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * The filter to search for the User to update in case it exists.
    */
@@ -1141,6 +1371,10 @@ export type UserDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * Filter which User to delete.
    */
@@ -1173,4 +1407,8 @@ export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
 }

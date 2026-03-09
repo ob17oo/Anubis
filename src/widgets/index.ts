@@ -1,2 +1,2 @@
-export { HeaderComp } from './Header/ui'
-export { Category } from './Category/ui'
+export { HeaderComp } from './HeaderComp/ui'
+export { Category } from './CategoryComp/ui'

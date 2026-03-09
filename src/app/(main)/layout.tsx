@@ -1,13 +1,16 @@
+import { authOption } from "@/shared/lib/auth"
 import { Category, HeaderComp } from "@/widgets"
+import { getServerSession } from "next-auth"
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode
 }>) {
+    const session = await getServerSession(authOption)
     return (
         <>
-            <HeaderComp />
+            <HeaderComp session={session}/>
             <Category />
             {children}
         </>

@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  City: 'City',
   Event: 'Event',
   User: 'User'
 } as const
@@ -71,11 +72,20 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const CityScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type CityScalarFieldEnum = (typeof CityScalarFieldEnum)[keyof typeof CityScalarFieldEnum]
+
+
 export const EventScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
   imageUrl: 'imageUrl',
+  cityId: 'cityId',
   location: 'location',
   date: 'date',
   price: 'price',
@@ -93,6 +103,7 @@ export const UserScalarFieldEnum = {
   id: 'id',
   userName: 'userName',
   password: 'password',
+  cityId: 'cityId',
   email: 'email',
   imageUrl: 'imageUrl',
   role: 'role'

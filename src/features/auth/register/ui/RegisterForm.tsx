@@ -31,8 +31,15 @@ export function RegisterForm(){
     const handleSubmitForm = async (data: RegisterFormData) => {
         try {
             setServerError('')
-            await RegisterAction(data)
-            reset()
+            const result = await RegisterAction(data)
+
+            if(result.success){
+                router.push('/login')
+            } else {
+                setServerError('Произошла ошибка, попробуйте позже')
+            }
+
+            reset() 
         } catch(error: unknown){
             if(error instanceof Error){
                 if(error.message.includes('NEXT_REDIRECT')){

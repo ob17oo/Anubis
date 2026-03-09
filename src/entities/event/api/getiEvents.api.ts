@@ -1,6 +1,6 @@
 import { prisma } from "@/shared/lib"
 
-export async function GetAllEvents() {
+export async function getAllEvents() {
     try {
         const events = await prisma.event.findMany()
         return events
