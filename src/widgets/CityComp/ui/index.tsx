@@ -1,20 +1,27 @@
+
+import { updateUserCity } from "@/entities/city/api";
+import { useCityStore } from "@/entities/city/model/city.store";
 import { TUserCity } from "@/entities/city/model/city.types"
-import { updateUserCity } from "@/entities/user/lib";
+
 import { InputComp } from "@/shared/ui";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+
+import { useMemo, useState, useTransition } from "react";
 
 interface CityPopUpProps {
     isOpen: boolean,
     onClose: () => void,
     city: TUserCity[],
-    userCity: TUserCity;
 }
-export function CityDialogComp({isOpen, onClose, city, userCity}:CityPopUpProps){
-    const router = useRouter()
+export function CityDialogComp({isOpen, onClose, city}:CityPopUpProps){
     const {data: session, update} = useSession()
+    const queryClient = useQueryClient()
+    const { selectedCityId, setSelectedCity, selectedCityName } = useCityStore()
+    const [isPending, startTransition] = useTransition()
+    const router = useRouter()
     const [search, setSearch] = useState('')
     
     const filteredCity = useMemo(() => {
@@ -22,32 +29,30 @@ export function CityDialogComp({isOpen, onClose, city, userCity}:CityPopUpProps)
         return city.filter((el) => el.name.toLowerCase().includes(search.toLowerCase()))
     },[city, search])
 
-    if(!session || !isOpen){
+    if(!isOpen){
         return null
     }
     
-    const handleChangeCity = async (selectedCity: string) => {
-        if(selectedCity === userCity.id){
-            onClose()
-            return
-        }
+    const handleChangeCity = async (cityId: string, cityName: string) => {
+        startTransition(async () => {
+            try {
+                const result = await updateUserCity(cityId)
 
-        try {
-            const resp = await updateUserCity({
-                newCityId: selectedCity,
-                userId: session.user.id
-            })
-
-            if(resp?.success){
-                await update()
+                if(result.success){
+                    setSelectedCity(cityId, cityName)
+                    if(session?.user.id){
+                        await update()
+                        router.refresh()
+                    }
+                    
+                setSearch('')
+                queryClient.invalidateQueries({queryKey: ['events']})
                 onClose()
-                router.refresh()
+                }
+            } catch(error: unknown){
+                console.log('Failed to update city:', error)
             }
-
-        } catch(error: unknown){
-            console.log(`Error updating user data: ${error}`)
-            throw new Error(`Eror updating data`)
-        }
+        })
     }
 
     return (
@@ -59,12 +64,12 @@ export function CityDialogComp({isOpen, onClose, city, userCity}:CityPopUpProps)
                     </button>
                     <div className="flex items-center gap-1">
                         <Image width={28} height={28} src={'/static/icons/map-location_accent.svg'} alt="UserCityPointer"/>
-                        <p className="text-lg">{userCity.name}</p>
+                        <p className="text-lg">{session?.user.city.name || selectedCityName}</p>
                     </div>
                     <InputComp value={search} onChange={(e) => setSearch(e.target.value)} label='Поиск города'/>
                     <div className="flex flex-col gap-3 h-80 overflow-scroll ">
                         { filteredCity.map((el) => (
-                            <button onClick={() => handleChangeCity(el.id)} className="text-lg text-left cursor-pointer" key={el.id} type="button">
+                            <button onClick={() => handleChangeCity(el.id, el.name)} className="text-lg text-left cursor-pointer" key={el.id} type="button">
                                 {el.name}
                             </button>
                         ))}

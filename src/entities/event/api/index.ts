@@ -1,1 +1,1 @@
-export { getAllEvents } from './getiEvents.api'
+export { getAllEventsByCity } from './getiEvents.api'

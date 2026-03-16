@@ -33,4 +33,5 @@ model Event {
     @@index([date])
     @@index([price])
     @@index([cityId])
+    @@index([cityId, date])
 }

@@ -1,5 +1,6 @@
 import { getAllCities } from "@/entities/city/api"
 import { authOption } from "@/shared/lib/auth"
+import { ReactQueryProvider } from "@/shared/providers/ReactQueryProvider"
 import { Category, HeaderComp } from "@/widgets"
 import { getServerSession } from "next-auth"
 
@@ -8,13 +9,15 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode
 }>) {
-    const session = await getServerSession(authOption)
-    const city = await getAllCities()
+    const [session, cities] = await Promise.all([
+        getServerSession(authOption),
+        getAllCities()
+    ])
     return (
-        <>
-            <HeaderComp city={city} session={session}/>
+        <ReactQueryProvider>
+            <HeaderComp city={cities} session={session}/>
             <Category />
             {children}
-        </>
+        </ReactQueryProvider>
     )
 }

@@ -1,7 +1,14 @@
-import { getAllEvents } from "@/entities/event/api";
-import { HomePage } from "@/view";
+'use client'
 
-export default async function Home(){
-  const events = await getAllEvents()
-  return <HomePage events={events}/>
+import { HomePage } from "@/view";
+import { useEvents } from "@/entities/event/lib/hooks"
+
+export default function Home(){
+  const { events, isLoading, error, isEmpty } = useEvents()
+  return <HomePage
+    events={events}
+    isLoading={isLoading}
+    error={error}
+    isEmpty={isEmpty}
+  />
 }

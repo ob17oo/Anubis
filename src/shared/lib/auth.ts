@@ -69,7 +69,12 @@ export const authOption: NextAuthOptions = {
                             email: true,
                             role: true,
                             cityId: true,
-                            city: true
+                            city: {
+                                select: {
+                                    id: true,
+                                    name: true
+                                }
+                            }
                         }
                     })
 
@@ -86,7 +91,15 @@ export const authOption: NextAuthOptions = {
                         throw new Error(`INVALID_PASSWORD`)
                     }
 
-                    return user
+                    return {
+                        id: user.id,
+                        userName: user.userName,
+                        email: user.email,
+                        imageUrl: user.imageUrl,
+                        role: String(user.role),
+                        cityId: user.cityId,
+                        city: user.city
+                    }
                 } catch(error: unknown){
                     if(process.env.NODE_ENV === 'development') {
                         console.log(`Error authorization: ${error}`)
@@ -133,7 +146,12 @@ export const authOption: NextAuthOptions = {
                             imageUrl: true,
                             role: true,
                             cityId: true,
-                            city: true
+                            city: {
+                                select: {
+                                    id: true,
+                                    name: true
+                                }
+                            }
                         }
                     })
 
@@ -172,7 +190,7 @@ export const authOption: NextAuthOptions = {
                 session.user.userName = token.userName
                 session.user.email = token.email
                 session.user.imageUrl = token.imageUrl
-                session.user.role = token.role
+                session.user.role = String(token.role)
                 session.user.cityId = token.cityId
                 session.user.city = token.city
             }
