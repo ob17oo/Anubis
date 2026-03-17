@@ -38,7 +38,7 @@ export function HeaderComp({session, city}:HeaderCompProps){
                         <div className="flex items-center gap-6">
                             <button onClick={() => setIsOpenCityPicker(true)} className="flex items-center gap-1.5 cursor-pointer">
                                 <Image width={28} height={28} src={'/static/icons/map-location.svg'} alt="City-Pointer"/>
-                                <span className="text-lg">{user?.city.name || selectedCityName}</span>
+                                <span className="text-lg">{selectedCityName}</span>
                             </button>
 
                             <CityDialogComp city={city} isOpen={isOpenCityPicker} onClose={() => setIsOpenCityPicker(false)}/>

@@ -1,4 +1,4 @@
-export const POPUP_CONSTANT = [
+export const LINKS_CONSTANT = [
     {
         value: 'Мои билеты',
         path: '/order',
@@ -14,6 +14,9 @@ export const POPUP_CONSTANT = [
         path: '/settings',
         iconPath: '/static/icons/setting_accent.svg'
     },
+]
+
+export const OTHER_LINKS = [
     {
         value: 'Вернуть билет',
         path: '/return-order',

@@ -23,12 +23,6 @@ export function HomePage({events,error, isLoading, isEmpty}:HomePageProps){
                 { events.map((event) => (
                     <EventCard key={event.id} event={event}/>
                 ))}
-                { events.map((event) => (
-                    <EventCard key={event.id} event={event}/>
-                ))}
-                { events.map((event) => (
-                    <EventCard key={event.id} event={event}/>
-                ))}
             </div>
         </div>
     )
