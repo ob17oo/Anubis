@@ -38,7 +38,7 @@ export function MenuDialogComp({isOpen, onClose}: PopUpCompProps){
                     
                     <button className="flex items-center gap-3 cursor-pointer px-4 hover:bg-gray-200 rounded-2xl h-10">
                         <Image width={24} height={24} src={'/static/icons/map-location_accent.svg'} alt="PopUpLocationIcon"/>
-                        <p className="text-xl">{session?.user.city.name || selectedCityName}</p>
+                        <p className="text-xl">{session?.user.city?.name || selectedCityName}</p>
                     </button>
                     { session?.user && (
                         LINKS_CONSTANT.map((link, index) => (

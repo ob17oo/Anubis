@@ -4,6 +4,7 @@ import { useCityStore } from "@/entities/city/model/city.store";
 import { EventType } from "../../../../../prisma/generated/prisma/enums";
 import { getEventsByGenre } from "../../api";
 import { useQuery } from "@tanstack/react-query";
+import { normalizeEventDates } from "../normalizeEvent";
 
 export function useEventsByGenre(genre?: EventType){
     const selectedCityId = useCityStore((state) => state.selectedCityId)
@@ -25,7 +26,7 @@ export function useEventsByGenre(genre?: EventType){
     })
 
     return {
-        events: data ?? [],
+        events: normalizeEventDates(data ?? []),
         isLoading: isLoading || isRefetching,
         error: error?.message ?? null,
         isEmpty: !isLoading && (data?.length ?? 0) === 0

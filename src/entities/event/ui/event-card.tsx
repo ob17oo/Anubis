@@ -5,6 +5,7 @@ interface EventCardProps {
     event: TEvent
 }
 export function EventCard({event}:EventCardProps){
+    const eventDate = event.date instanceof Date ? event.date : new Date(event.date)
     return (
         <div className="flex flex-col gap-4 max-h-120 h-full relative">
             <div className="relative w-full h-80 rounded-2xl border-2 border-[#FF5100] overflow-hidden">
@@ -13,7 +14,7 @@ export function EventCard({event}:EventCardProps){
             <div className="flex flex-col">
                 <h2 className="text-3xl font-semibold">{event.title}</h2>
                 <div className="flex gap-3 items-center">
-                    <span className="text-lg">{event.date.toLocaleDateString(`ru-RU`,{  day: 'numeric',month: 'long' })}</span>
+                    <span className="text-lg">{eventDate.toLocaleDateString(`ru-RU`,{  day: 'numeric',month: 'long' })}</span>
                     <p>|</p>
                     <span className="text-lg">{event.location}</span>
                 </div>

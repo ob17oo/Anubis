@@ -6,7 +6,7 @@ export interface TEvent {
     description: string,
     imageUrl: string, 
     location: string,
-    date: Date,
+    date: Date | string,
     price: number,
     ticketAmount: number,
     genre: EventType

@@ -3,6 +3,7 @@
 import { useCityStore } from "@/entities/city/model/city.store";
 import { useQuery } from '@tanstack/react-query'
 import { getAllEventsByCity } from "../../api";
+import { normalizeEventDates } from "../normalizeEvent";
 export function useEvents() {
     const selectedCityId = useCityStore((state) => state.selectedCityId)
 
@@ -18,7 +19,7 @@ export function useEvents() {
     })
 
     return {
-        events: data ?? [],
+        events: normalizeEventDates(data ?? []),
         isLoading: isLoading || isRefetching,
         error: error?.message ?? null,
         isEmpty: !isLoading && (data?.length ?? 0) === 0

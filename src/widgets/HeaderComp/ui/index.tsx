@@ -20,6 +20,8 @@ export function HeaderComp({session, city}:HeaderCompProps){
     const router = useRouter()
     const [isOpenMenu, setIsOpenMenu] = useState(false)
     const [isOpenCityPicker, setIsOpenCityPicker] = useState(false)
+    
+    console.log(city)
 
     useLockScroll(isOpenCityPicker)
 

@@ -59,3 +59,27 @@ export async function getEventsByGenre(cityId: string, genre: EventType){
         throw new Error(`Error fethcing events: ${error}`)
     }
 }
+
+export async function getEventById(eventId: string) {
+    try {
+        const event = await prisma.event.findUnique({
+            where: { id: eventId }
+        })
+
+        if(!event){
+            throw new Error('EVENT_NOT_FOUND')
+        }
+
+        return event
+    } catch(error: unknown){
+        if(process.env.NODE_ENV === 'development') {
+            console.log(error)
+        }
+
+        if(error instanceof Error && error.message === 'EVENT_NOT_FOUND'){
+            throw new Error(`EVENT_NOT_FOUND`)
+        }
+
+        throw new Error(`Error fethcing event: ${error}`)
+    }
+}

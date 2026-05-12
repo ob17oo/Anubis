@@ -64,7 +64,7 @@ export function CityDialogComp({isOpen, onClose, city}:CityPopUpProps){
                     </button>
                     <div className="flex items-center gap-1">
                         <Image width={28} height={28} src={'/static/icons/map-location_accent.svg'} alt="UserCityPointer"/>
-                        <p className="text-lg">{session?.user.city.name || selectedCityName}</p>
+                        <p className="text-lg">{session?.user.city?.name || selectedCityName}</p>
                     </div>
                     <InputComp value={search} onChange={(e) => setSearch(e.target.value)} label='Поиск города'/>
                     <div className="flex flex-col gap-3 h-80 overflow-scroll ">
