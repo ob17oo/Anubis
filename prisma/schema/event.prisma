@@ -1,37 +1,66 @@
 enum EventType {
-    cinema
-    concert
-    kids
-    standup
-    theater
-    sport
+  cinema
+  concert
+  kids
+  standup
+  theater
+  sport
 }
+
+enum EventStatus {
+  DRAFT
+  MODERATING
+  PUBLISHED
+  CANCELLED
+}
+
 model Event {
-    id String @id @default(cuid())
-    title String
-    description String
-    imageUrl String @map("image_url")
-    
-    cityId String @default("cmmjcycy600013b6svl5n4s62") @map("city_id")
-    city City @relation(references: [id], fields: [cityId])
+  id          String @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String @map("image_url")
 
-    location String @map("event_location")
+  cityId String? @map("city_id")
+  city   City?   @relation(references: [id], fields: [cityId])
 
-    date DateTime @map("event_date")
-    price Int
-    ticketAmount Int @default(100) @map("ticket_amount")
+  venueId String? @map("venue_id")
+  venue   Venue?  @relation(fields: [venueId], references: [id])
 
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime? @updatedAt() @map("updated_at")
+  location String? @map("event_location")
 
-    genre EventType @default(concert) 
-    rating Float @default(0)
+  date         DateTime @map("event_date")
+  price        Int
+  ticketAmount Int      @default(100) @map("ticket_amount")
 
-    @@map("events")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt() @map("updated_at")
 
-    @@index([createdAt])
-    @@index([date])
-    @@index([price])
-    @@index([cityId])
-    @@index([cityId, date])
+  genre  EventType @default(concert)
+  rating Float     @default(0)
+
+  duration       Int         @default(120)
+  ageRestriction String      @default("0+") @map("age_restriction")
+  status         EventStatus @default(DRAFT)
+  isModerated    Boolean     @default(false) @map("is_moderated")
+
+  organizerId    String?     @map("organizer_id")
+  organizer      User?       @relation("EventOrganizer", fields: [organizerId], references: [id])
+
+  tickets     Ticket[]
+  artists     Artist[]     @relation("EventToArtist")
+  collections Collection[] @relation("EventToCollection")
+  favorites   Favorite[]
+  reviews     Review[]
+  promoCodes  PromoCode[]
+
+  @@index([organizerId])
+  @@index([venueId])
+  @@index([createdAt])
+  @@index([date])
+  @@index([price])
+  @@index([cityId])
+  @@index([cityId, date])
+  @@index([title])
+  @@index([status])
+  @@map("events")
 }

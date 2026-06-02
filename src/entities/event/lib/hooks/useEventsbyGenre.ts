@@ -1,8 +1,7 @@
 'use client'
 
 import { useCityStore } from "@/entities/city/model/city.store";
-import { EventType } from "../../../../../prisma/generated/prisma/enums";
-import { getEventsByGenre } from "../../api";
+import { EventType } from "../../../../../prisma/generated/prisma";
 import { useQuery } from "@tanstack/react-query";
 import { normalizeEventDates } from "../normalizeEvent";
 
@@ -11,7 +10,15 @@ export function useEventsByGenre(genre?: EventType){
 
     const queryKey = genre ? ['events' , selectedCityId, genre] : ['events', selectedCityId]
 
-    const queryFn = genre ? () => getEventsByGenre(selectedCityId, genre) : () => import('../../api').then((el) => el.getAllEventsByCity(selectedCityId))
+    const queryFn = async () => {
+        if (!selectedCityId) return []
+        const params = new URLSearchParams({ cityId: selectedCityId })
+        if (genre) params.append('genre', genre)
+        
+        const res = await fetch(`/api/events?${params.toString()}`)
+        if (!res.ok) throw new Error('Failed to fetch events')
+        return res.json()
+    }
 
     const { data,error, isLoading, isRefetching } = useQuery({
         queryKey,

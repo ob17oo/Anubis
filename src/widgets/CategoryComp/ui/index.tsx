@@ -6,9 +6,19 @@ import { usePathname } from "next/navigation";
 export function Category(){
     const currentPath = usePathname()
     return (
-        <div className="flex items-center gap-8 w-full h-15">
+        <div className="flex items-center gap-4 w-full h-16 overflow-x-auto hide-scrollbar px-6 mt-4">
             { HEADER_CATEGORY.map((element) => (
-                <Link className={`text-xl px-3 py-1.5 rounded-full cursor-pointer hover:bg-gray-200 transition-all duration-300 ease-in-out ${element.path === currentPath ? 'bg-gray-200' : 'bg-transparent'}`} key={element.value} href={element.path}>{element.value}</Link>
+                <Link 
+                    className={`text-sm font-medium px-5 py-2.5 rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
+                        element.path === currentPath 
+                            ? 'bg-foreground text-background shadow-md' 
+                            : 'bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground border border-border'
+                    }`} 
+                    key={element.value} 
+                    href={element.path}
+                >
+                    {element.value}
+                </Link>
             ))}
         </div>
     )

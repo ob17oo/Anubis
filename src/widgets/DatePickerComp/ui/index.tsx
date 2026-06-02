@@ -8,10 +8,14 @@ import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon, XIcon } from "lucide-r
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
+import { TEvent } from "@/entities/event/model"
+import { getDatesWithEvents, toEventDay } from "@/entities/event/lib/filterByDate"
 
 type DatePickerCompProps = {
   value: Date | null
   onChange: (value: Date | null) => void
+  /** Все мероприятия города — для подсветки дней с событиями (любой жанр) */
+  events?: TEvent[]
   className?: string
 }
 
@@ -24,6 +28,7 @@ function useVisibleDaysCount() {
   React.useEffect(() => {
     const compute = () => {
       const w = window.innerWidth
+      if (w < 480) return 5
       if (w < 640) return 7
       if (w < 1024) return 11
       return 17
@@ -38,11 +43,13 @@ function useVisibleDaysCount() {
   return count
 }
 
-export function DatePickerComp({ value, onChange, className }: DatePickerCompProps) {
+export function DatePickerComp({ value, onChange, events = [], className }: DatePickerCompProps) {
   const [open, setOpen] = React.useState(false)
   const [windowStart, setWindowStart] = React.useState(() => startOfDay(new Date()))
   const visibleCount = useVisibleDaysCount()
   const days = React.useMemo(() => buildDays(windowStart, visibleCount), [windowStart, visibleCount])
+
+  const datesWithEvents = React.useMemo(() => getDatesWithEvents(events), [events])
 
   React.useEffect(() => {
     if (!value) return
@@ -54,7 +61,7 @@ export function DatePickerComp({ value, onChange, className }: DatePickerCompPro
   const monthLabelNext = format(days[days.length - 1], "LLLL", { locale: ru })
 
   return (
-    <section className={cn("flex flex-col gap-2", className)}>
+    <section className={cn("flex flex-col gap-2 w-full", className)}>
       <div className="flex items-end justify-between gap-6">
         <p className="text-[28px] font-semibold tracking-[-0.02em] leading-none">
           Афиша событий
@@ -67,7 +74,7 @@ export function DatePickerComp({ value, onChange, className }: DatePickerCompPro
                 type="button"
                 className={cn(
                   "h-9 px-3 rounded-full border bg-white/60 hover:bg-white flex items-center gap-2 transition-colors",
-                  value ? "border-[#FF5100]/50" : "border-border"
+                  value ? "border-primary/50 animate-pulse" : "border-border"
                 )}
                 aria-label="Открыть календарь"
                 title="Календарь"
@@ -83,6 +90,12 @@ export function DatePickerComp({ value, onChange, className }: DatePickerCompPro
                 onSelect={(d) => {
                   onChange(d ?? null)
                   setOpen(false)
+                }}
+                modifiers={{
+                  hasEvents: (day) => datesWithEvents.has(toEventDay(day).toISOString()),
+                }}
+                modifiersClassNames={{
+                  hasEvents: "relative font-bold after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:size-1 after:rounded-full after:bg-primary",
                 }}
               />
             </PopoverContent>
@@ -119,33 +132,38 @@ export function DatePickerComp({ value, onChange, className }: DatePickerCompPro
         </button>
 
         <div className="flex-1">
-          <div className="grid grid-cols-7 sm:grid-cols-11 lg:grid-cols-17 gap-2 py-1">
+          <div className="grid grid-cols-5 min-[480px]:grid-cols-7 sm:grid-cols-11 lg:grid-cols-17 gap-1 sm:gap-2 py-1">
             {days.map((d) => {
               const active = value ? isSameDay(value, d) : false
               const dow = d.getDay()
               const isWeekend = dow === 0 || dow === 6
+              const hasEvents = datesWithEvents.has(d.toISOString())
               return (
                 <button
                   key={d.toISOString()}
                   type="button"
                   onClick={() => onChange(active ? null : d)}
                   className={cn(
-                    "min-w-10 h-14 rounded-xl border flex flex-col items-center justify-center leading-none transition-colors",
+                    "relative min-w-9 sm:min-w-10 h-12 sm:h-14 rounded-xl border flex flex-col items-center justify-center leading-none transition-colors",
                     "bg-white/60 hover:bg-white",
-                    active ? "border-[#FF5100] bg-[#FF5100] text-white" : "border-border"
+                    active ? "border-primary bg-primary text-white" : "border-border",
+                    !active && hasEvents && "border-primary/45"
                   )}
                 >
-                  <span className="text-[15px] font-semibold">
+                  <span className="text-[14px] sm:text-[15px] font-semibold">
                     {format(d, "d", { locale: ru })}
                   </span>
                   <span
                     className={cn(
-                      "text-[10px] mt-1",
+                      "text-[9px] sm:text-[10px] mt-1",
                       active ? "text-white/90" : isWeekend ? "text-red-500" : "opacity-70"
                     )}
                   >
                     {format(d, "EE", { locale: ru })}
                   </span>
+                  {hasEvents && !active && (
+                    <span className="absolute bottom-1.5 size-1 rounded-full bg-primary" />
+                  )}
                 </button>
               )
             })}
@@ -165,4 +183,3 @@ export function DatePickerComp({ value, onChange, className }: DatePickerCompPro
     </section>
   )
 }
-

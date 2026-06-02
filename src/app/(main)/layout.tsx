@@ -3,6 +3,7 @@ import { authOption } from "@/shared/lib/auth"
 import { ReactQueryProvider } from "@/shared/providers/ReactQueryProvider"
 import { Category, FooterComp, HeaderComp } from "@/widgets"
 import { getServerSession } from "next-auth"
+import { Suspense } from "react"
 
 export default async function RootLayout({
     children,
@@ -17,7 +18,9 @@ export default async function RootLayout({
         <ReactQueryProvider>
             <HeaderComp city={cities} session={session}/>
             <div className="mt-1 px-3 pb-10 sm:mt-2 sm:px-4 md:px-5 md:pb-12">
-                <Category />
+                <Suspense>
+                    <Category />
+                </Suspense>
                 <div className="pt-4 sm:pt-5 md:pt-6">
                     {children}
                 </div>

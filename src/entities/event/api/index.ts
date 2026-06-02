@@ -1,3 +1,3 @@
-export { getAllEventsByCity } from './getiEvents.api'
-export { getEventsByGenre } from './getiEvents.api'
-export { getEventById } from './getiEvents.api'
+export { getAllEventsByCity } from './getEvents.api'
+export { getEventsByGenre } from './getEvents.api'
+export { getEventById, getEventBySlug } from './getEvents.api'

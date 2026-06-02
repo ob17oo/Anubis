@@ -1,22 +1,30 @@
 enum USER_ROLE {
-    ADMIN
-    USER
-    MODERATOR
+  ADMIN
+  USER
+  MODERATOR
+  ORGANIZER
 }
 
 model User {
-    id String @id @default(cuid())
-    userName String @map("user_name")
-    password String
-    
-    cityId String @default("cmmjcycy600013b6svl5n4s62") @map("city_id")
-    city City @relation(references: [id], fields: [cityId])
+  id       String @id @default(cuid())
+  userName String @map("user_name")
+  password String
 
-    email String @unique
-    imageUrl String @map("image_url") @default("/static/default/default-user.svg")
-    role USER_ROLE @default(USER) 
+  cityId String? @map("city_id")
+  city   City?   @relation(references: [id], fields: [cityId])
 
-    @@index([role])
-    @@index([email])
-    @@index([cityId])
+  email    String    @unique
+  imageUrl String    @default("/static/default/default-user.svg") @map("image_url")
+  role     USER_ROLE @default(USER)
+
+  orders Order[]
+  tickets Ticket[]
+  favorites Favorite[]
+  reviews Review[]
+  notifications Notification[]
+  organizedEvents Event[] @relation("EventOrganizer")
+
+  @@index([role])
+  @@index([email])
+  @@index([cityId])
 }

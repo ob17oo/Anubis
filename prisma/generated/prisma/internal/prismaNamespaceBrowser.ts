@@ -51,9 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  City: 'City',
-  Event: 'Event',
-  User: 'User'
+
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -70,68 +68,4 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
-
-
-export const CityScalarFieldEnum = {
-  id: 'id',
-  name: 'name'
-} as const
-
-export type CityScalarFieldEnum = (typeof CityScalarFieldEnum)[keyof typeof CityScalarFieldEnum]
-
-
-export const EventScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  imageUrl: 'imageUrl',
-  cityId: 'cityId',
-  location: 'location',
-  date: 'date',
-  price: 'price',
-  ticketAmount: 'ticketAmount',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  genre: 'genre',
-  rating: 'rating'
-} as const
-
-export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
-
-
-export const UserScalarFieldEnum = {
-  id: 'id',
-  userName: 'userName',
-  password: 'password',
-  cityId: 'cityId',
-  email: 'email',
-  imageUrl: 'imageUrl',
-  role: 'role'
-} as const
-
-export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
-export const SortOrder = {
-  asc: 'asc',
-  desc: 'desc'
-} as const
-
-export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

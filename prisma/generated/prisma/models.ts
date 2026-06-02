@@ -8,7 +8,4 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/City'
-export type * from './models/Event'
-export type * from './models/User'
 export type * from './commonInputTypes'

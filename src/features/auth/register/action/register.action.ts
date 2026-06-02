@@ -1,47 +1,50 @@
 'use server'
-import { prisma } from "@/shared/lib";
-import { hash } from "bcrypt";
-import { redirect } from "next/navigation";
+
+import { prisma } from "@/shared/lib"
+import { hash } from "bcrypt"
+import { registerServerSchema } from "../lib/schema/register.schema"
 
 export async function RegisterAction(data: {
-    email: string,
-    userName: string,
-    password:string
-}){
-    const userEmail = data.email as string
-    const userLogin = data.userName as string
-    const userPassword = data.password as string
+    email: string
+    userName: string
+    password: string
+}) {
+    const parsed = registerServerSchema.safeParse(data)
+
+    if (!parsed.success) {
+        return {
+            success: false as const,
+            error: parsed.error.issues.map((i) => i.message).join(', '),
+        }
+    }
+
+    const { email, userName, password } = parsed.data
+
     try {
         const existUser = await prisma.user.findUnique({
-            where: {
-                email: userEmail
-            }
+            where: { email },
         })
 
-        if(existUser){
-            throw new Error(`USER_EXIST`)
+        if (existUser) {
+            return { success: false as const, error: 'Пользователь с таким email уже существует' }
         }
 
         await prisma.user.create({
             data: {
-                email: userEmail,
-                userName: userLogin,
-                password: await hash(userPassword, 10),
-            }
+                email,
+                userName,
+                password: await hash(password, 10),
+            },
         })
 
-        return { success: true }
-
-    } catch(error: unknown){
-        if(process.env.NODE_ENV === 'development'){
-            console.log(`Error creating user: ${error}`)
+        return { success: true as const }
+    } catch (error: unknown) {
+        if (process.env.NODE_ENV === 'development') {
+            console.log(`Registration error: ${error}`)
         }
-
-        console.log(`Registration error: ${error}`)
-
-        if(error instanceof Error && error.message.includes('уже существует')){
-            throw new Error
+        return {
+            success: false as const,
+            error: 'Произошла ошибка при регистрации. Повторите позже',
         }
-        throw new Error('Произошла ошибка при регистрации. Повторите позже')
     }
 }

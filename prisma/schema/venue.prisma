@@ -1,0 +1,14 @@
+model Venue {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  capacity    Int?
+  cityId      String   @map("city_id")
+  city        City     @relation(fields: [cityId], references: [id])
+  events      Event[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([cityId])
+  @@map("venues")
+}

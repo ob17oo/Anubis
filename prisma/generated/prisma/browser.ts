@@ -17,18 +17,4 @@ import * as Prisma from './internal/prismaNamespaceBrowser'
 export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
-/**
- * Model City
- * 
- */
-export type City = Prisma.CityModel
-/**
- * Model Event
- * 
- */
-export type Event = Prisma.EventModel
-/**
- * Model User
- * 
- */
-export type User = Prisma.UserModel
+

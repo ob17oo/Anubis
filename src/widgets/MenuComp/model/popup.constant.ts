@@ -8,12 +8,7 @@ export const LINKS_CONSTANT = [
         value: 'Профиль',
         path: '/profile',
         iconPath: '/static/icons/user_accent.svg'
-    },
-    {
-        value: 'Настройки',
-        path: '/settings',
-        iconPath: '/static/icons/setting_accent.svg'
-    },
+    }
 ]
 
 export const OTHER_LINKS = [
@@ -24,7 +19,7 @@ export const OTHER_LINKS = [
     },
     {
         value: 'Частые вопросы',
-        path: '/FAQ',
+        path: '/faq',
         iconPath: '/static/icons/question-mark_accent.svg'
     },
     {

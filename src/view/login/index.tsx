@@ -1,9 +1,10 @@
-import { LoginForm } from "@/features/auth/login/ui";
+import { LoginForm } from "@/features/auth/login/ui"
+import { Suspense } from "react"
 
-export function LoginPage(){
+export function LoginPage() {
     return (
-        <div className="w-1/2 mx-auto mt-50">
+        <Suspense fallback={<div className="text-center py-20 opacity-70">Загрузка…</div>}>
             <LoginForm />
-        </div>
+        </Suspense>
     )
 }

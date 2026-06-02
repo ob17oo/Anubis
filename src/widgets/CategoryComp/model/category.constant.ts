@@ -1,26 +1,26 @@
 export const HEADER_CATEGORY = [
     {
-        path: '/concert',
+        path: '/events/concert',
         value: 'Концерты'
     },
     {
-        path: '/theater',
+        path: '/events/theater',
         value: 'Театр'
     },
     {
-        path: '/kids',
+        path: '/events/kids',
         value: 'Детям'
     },
     {
-        path: '/sport',
+        path: '/events/sport',
         value: 'Спорт'
     },
     {
-        path: '/standup',
+        path: '/events/standup',
         value: 'Стендап'
     },
     {
-        path: '/cinema',
+        path: '/events/cinema',
         value: 'Кино'
     },
 ]

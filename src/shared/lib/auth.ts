@@ -199,22 +199,13 @@ export const authOption: NextAuthOptions = {
     },
     events: {
         async signIn({user,isNewUser}){
-            console.log(`User is signed in`, {
-                userId: user.id,
-                email: user.email,
-                isNewUser
-            })
+            // Optional telemetry or logging can be added here
         },
         async signOut({token}){
-            console.log(`User is signed out`, {
-                userId: token.id
-            })
+            // Optional telemetry or logging can be added here
         },
         async createUser({user}){
-            console.log(`New user created`, {
-                userId: user.id,
-                email: user.email
-            })
+            // Optional telemetry or logging can be added here
         }
     },
     cookies: {

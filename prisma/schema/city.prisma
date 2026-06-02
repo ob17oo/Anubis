@@ -1,9 +1,10 @@
 model City {
-    id String @id @default(cuid())
-    name String @unique
+  id   String @id @default(cuid())
+  name String @unique
 
-    events Event[]
-    users User[]
+  events Event[]
+  users  User[]
+  venues Venue[]
 
-    @@index([name])
+  @@index([name])
 }

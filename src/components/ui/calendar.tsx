@@ -18,37 +18,33 @@ function Calendar({
   ...props
 }: CalendarProps) {
   const mergedClassNames = {
-    months: "flex flex-col sm:flex-row gap-4",
-    month: "space-y-3",
-    // react-day-picker v10 has slightly different typing for classNames keys.
-    // We keep our classNames map and let it pass through safely.
-    caption: "flex justify-center pt-1 relative items-center",
-    caption_label: "text-sm font-medium",
+    months: "flex flex-col sm:flex-row gap-4 justify-center",
+    month: "space-y-4",
+    month_caption: "flex justify-center pt-1 relative items-center mb-4",
+    caption_label: "text-sm font-semibold text-foreground",
     nav: "space-x-1 flex items-center",
-    nav_button: cn(
+    button_previous: cn(
       buttonVariants({ variant: "ghost", size: "icon-sm" }),
-      "rounded-full"
+      "rounded-full absolute left-1 cursor-pointer"
     ),
-    nav_button_previous: "absolute left-1",
-    nav_button_next: "absolute right-1",
-    table: "w-full border-collapse space-y-1",
-    head_row: "flex",
-    head_cell: "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
-    row: "flex w-full mt-1",
-    cell:
-      "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-muted [&:has([aria-selected])]:rounded-xl",
-    day: cn(
+    button_next: cn(
+      buttonVariants({ variant: "ghost", size: "icon-sm" }),
+      "rounded-full absolute right-1 cursor-pointer"
+    ),
+    month_grid: "w-full border-collapse",
+    weekdays: "",
+    weekday: "text-muted-foreground text-xs font-semibold text-center pb-2 uppercase tracking-wider",
+    week: "",
+    day: "p-0 text-center relative",
+    day_button: cn(
       buttonVariants({ variant: "ghost", size: "icon" }),
-      "h-9 w-9 rounded-xl font-normal aria-selected:opacity-100"
+      "h-9 w-9 rounded-xl font-normal aria-selected:opacity-100 cursor-pointer flex items-center justify-center mx-auto text-sm"
     ),
-    day_today: "border border-[#FF5100]/40",
-    day_selected:
-      "bg-[#FF5100] text-white hover:bg-[#FF5100]/90 hover:text-white focus:bg-[#FF5100] focus:text-white",
-    day_outside:
-      "text-muted-foreground opacity-60 aria-selected:bg-muted aria-selected:text-muted-foreground aria-selected:opacity-60",
-    day_disabled: "text-muted-foreground opacity-40",
-    day_range_middle: "aria-selected:bg-[#FF5100]/12 aria-selected:text-foreground",
-    day_hidden: "invisible",
+    today: "border border-primary/50 text-primary font-semibold rounded-xl",
+    selected: "bg-primary text-primary-foreground hover:bg-primary/95 hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground rounded-xl",
+    outside: "text-muted-foreground opacity-40",
+    disabled: "text-muted-foreground opacity-20",
+    hidden: "invisible",
     ...classNames,
   } as unknown as CalendarProps["classNames"]
 

@@ -7,10 +7,10 @@ declare module 'next-auth' {
             id: string,
             email: string,
             userName: string,
-            cityId: string,
+            cityId: string | null,
             imageUrl: string,
             role: string,
-            city: TUserCity
+            city: TUserCity | null
         } & DefaultSession['user']
     } 
 
@@ -18,10 +18,10 @@ declare module 'next-auth' {
         id: string,
         email: string,
         userName: string,
-        cityId: string,
+        cityId: string | null,
         imageUrl: string,
         role: string,
-        city: TUserCity
+        city: TUserCity | null
     }
 }
 
@@ -30,9 +30,9 @@ declare module 'next-auth/jwt' {
         id: string,
         email: string,
         userName: string,
-        cityId: string,
+        cityId: string | null,
         imageUrl: string,
         role: string,
-        city: TUserCity
+        city: TUserCity | null
     }
 }

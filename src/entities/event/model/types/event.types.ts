@@ -1,4 +1,4 @@
-import { EventType } from "../../../../../prisma/generated/prisma/enums";
+import { EventType } from "../../../../../prisma/generated/prisma";
 
 export interface TEvent {
     id: string,
