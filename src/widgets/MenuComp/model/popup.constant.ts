@@ -30,9 +30,9 @@ export const OTHER_LINKS = [
 ]
 
 export const DEFAULT_USER = {
-  userName: 'Гость',
-  email: '',
-  imageUrl: '/static/default/default-user.svg',
-  role: 'USER',
-  cityId: '',
+    userName: 'Гость',
+    email: '',
+    imageUrl: '/static/default/default-user.svg',
+    role: 'USER',
+    cityId: '',
 }

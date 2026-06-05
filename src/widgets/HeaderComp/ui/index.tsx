@@ -56,7 +56,7 @@ export function HeaderComp({ session, city }: HeaderCompProps) {
                 <div className="w-full flex items-center justify-end">
                     <div className="flex items-center gap-4 md:gap-6">
                         <button onClick={() => setIsOpenCityPicker(true)} className="flex items-center gap-1 sm:gap-2 cursor-pointer text-muted-foreground hover:text-foreground transition-colors font-medium">
-                            <Image width={24} height={24} src={'/static/icons/map-location_accent.svg'} alt="City-Pointer" className="opacity-80 shrink-0 w-5 h-5 sm:w-6 sm:h-6" />
+                            <Image width={24} height={24} src={'/static/icons/map-location.svg'} alt="City-Pointer" className="opacity-80 shrink-0 w-5 h-5 sm:w-6 sm:h-6" />
                             <span className="text-sm sm:text-base tracking-wide max-w-[80px] min-[360px]:max-w-[120px] sm:max-w-none truncate">{isMounted ? selectedCityName : 'Москва'}</span>
                         </button>
 
@@ -92,7 +92,7 @@ export function HeaderComp({ session, city }: HeaderCompProps) {
                         )}
                     </div>
                 </div>
-                <div className="w-fit ml-2 sm:ml-4 border-l border-border pl-2 sm:pl-4">
+                <div className="w-25 ml-2 sm:ml-4 border-l border-border pl-2 sm:pl-4">
                     <button onClick={() => setIsOpenMenu(true)} type="button" className="cursor-pointer rounded-full overflow-hidden border-2 border-border hover:border-primary transition-colors shrink-0">
                         <Image width={40} height={40} src={session?.user?.imageUrl || '/static/default/default-user.svg'} alt="HeaderUserAvatar" className="object-cover w-8 h-8 sm:w-10 sm:h-10" />
                     </button>
