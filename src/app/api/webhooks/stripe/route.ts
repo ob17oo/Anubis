@@ -1,17 +1,13 @@
 import { NextResponse } from 'next/server';
+import { headers } from 'next/headers';
 import { stripe } from '@/shared/lib/stripe';
 import { prisma } from '@/shared/lib';
 import crypto from 'crypto';
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export async function POST(req: Request) {
   const body = await req.text();
-  const signature = req.headers.get('stripe-signature');
+  const headersList = await headers();
+  const signature = headersList.get('stripe-signature');
 
   if (!signature) {
     return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 });
