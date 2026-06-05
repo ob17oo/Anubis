@@ -33,51 +33,85 @@ export async function POST(req: Request) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as any;
-        const { orderId, eventId, quantity, userId } = session.metadata;
+        console.log(`[Stripe Webhook] Received event type: ${event.type}`);
+        console.log(`[Stripe Webhook] Session Metadata:`, JSON.stringify(session.metadata));
+
+        const { orderId, eventId, quantity, userId } = session.metadata || {};
 
         if (!orderId || !eventId || !quantity || !userId) {
-          console.error('Missing metadata in checkout session', session.metadata);
-          break;
+          const errorMsg = `Missing metadata in checkout session: orderId=${orderId}, eventId=${eventId}, quantity=${quantity}, userId=${userId}`;
+          console.error(`[Stripe Webhook] ${errorMsg}`);
+          throw new Error(errorMsg);
         }
 
-        // Update Payment status
-        await prisma.payment.update({
-          where: { orderId },
-          data: {
-            status: 'PAID',
-            transactionId: session.payment_intent as string,
-          },
-        });
-
-        // Update Order status
-        await prisma.order.update({
+        // 3. Find Order
+        const order = await prisma.order.findUnique({
           where: { id: orderId },
-          data: { status: 'PAID' },
+        });
+        if (!order) {
+          const errorMsg = `Order with ID ${orderId} not found in database`;
+          console.error(`[Stripe Webhook] ${errorMsg}`);
+          throw new Error(errorMsg);
+        }
+        console.log(`[Stripe Webhook] Found Order in database:`, JSON.stringify(order));
+
+        // 4. Find Payment
+        const payment = await prisma.payment.findUnique({
+          where: { orderId },
+        });
+        if (!payment) {
+          const errorMsg = `Payment with orderId ${orderId} not found in database`;
+          console.error(`[Stripe Webhook] ${errorMsg}`);
+          throw new Error(errorMsg);
+        }
+        console.log(`[Stripe Webhook] Found Payment in database:`, JSON.stringify(payment));
+
+        console.log(`[Stripe Webhook] session.payment_intent: ${session.payment_intent} (type: ${typeof session.payment_intent})`);
+
+        // Perform updates inside a transaction to guarantee atomic execution of all business logic
+        await prisma.$transaction(async (tx) => {
+          // 5. Update Payment status
+          const updatedPayment = await tx.payment.update({
+            where: { orderId },
+            data: {
+              status: 'PAID',
+              transactionId: session.payment_intent as string,
+            },
+          });
+          console.log(`[Stripe Webhook] Updated Payment status to PAID:`, JSON.stringify(updatedPayment));
+
+          // Update Order status
+          const updatedOrder = await tx.order.update({
+            where: { id: orderId },
+            data: { status: 'PAID' },
+          });
+          console.log(`[Stripe Webhook] Updated Order status to PAID:`, JSON.stringify(updatedOrder));
+
+          // Deduct ticket amount from Event
+          const updatedEvent = await tx.event.update({
+            where: { id: eventId },
+            data: {
+              ticketAmount: { decrement: parseInt(quantity, 10) },
+            },
+          });
+          console.log(`[Stripe Webhook] Decremented Event ticket amount:`, JSON.stringify(updatedEvent));
+
+          // 6. Create Ticket and 7. Link Ticket to User
+          const ticket = await tx.ticket.create({
+            data: {
+              userId,
+              eventId,
+              orderId,
+              quantity: parseInt(quantity, 10),
+              totalPrice: order.totalAmount,
+              status: 'CONFIRMED',
+              qrCode: crypto.randomUUID(), // Generate a mock QR code string
+            },
+          });
+          console.log(`[Stripe Webhook] Created Ticket and linked to User ${userId}:`, JSON.stringify(ticket));
         });
 
-        // Deduct ticket amount from Event
-        await prisma.event.update({
-          where: { id: eventId },
-          data: {
-            ticketAmount: { decrement: parseInt(quantity, 10) },
-          },
-        });
-
-        // Create Ticket
-        const orderInfo = await prisma.order.findUnique({ where: { id: orderId } });
-        
-        await prisma.ticket.create({
-          data: {
-            userId,
-            eventId,
-            orderId,
-            quantity: parseInt(quantity, 10),
-            totalPrice: orderInfo?.totalAmount || 0,
-            status: 'CONFIRMED',
-            qrCode: crypto.randomUUID(), // Generate a mock QR code string
-          },
-        });
-
+        console.log(`[Stripe Webhook] Checkout session processing completed successfully for order ${orderId}`);
         break;
       }
 
