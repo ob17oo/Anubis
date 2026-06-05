@@ -122,7 +122,9 @@ export type NotificationType = (typeof NotificationType)[keyof typeof Notificati
 
 export const OrderStatus: {
   PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
   PAID: 'PAID',
+  FAILED: 'FAILED',
   CANCELLED: 'CANCELLED',
   REFUNDED: 'REFUNDED'
 };
@@ -132,8 +134,10 @@ export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
 export const PaymentStatus: {
   PENDING: 'PENDING',
-  COMPLETED: 'COMPLETED',
+  PROCESSING: 'PROCESSING',
+  PAID: 'PAID',
   FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED',
   REFUNDED: 'REFUNDED'
 };
 

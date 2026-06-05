@@ -1,7 +1,9 @@
 enum PaymentStatus {
   PENDING
-  COMPLETED
+  PROCESSING
+  PAID
   FAILED
+  CANCELLED
   REFUNDED
 }
 

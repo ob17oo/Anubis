@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Calendar, Users, LogOut, RotateCcw } from "lucide-react";
+import { LayoutDashboard, Calendar, Users, LogOut, RotateCcw, CreditCard } from "lucide-react";
 
 export function AdminSidebar({ className = "hidden md:flex sticky top-0" }: { className?: string }) {
   const pathname = usePathname();
@@ -12,6 +12,7 @@ export function AdminSidebar({ className = "hidden md:flex sticky top-0" }: { cl
     { name: "События", path: "/admin/events", icon: Calendar },
     { name: "Пользователи", path: "/admin/users", icon: Users },
     { name: "Возвраты", path: "/admin/refunds", icon: RotateCcw },
+    { name: "Платежи", path: "/admin/payments", icon: CreditCard },
   ];
 
   return (

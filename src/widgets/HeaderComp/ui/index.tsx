@@ -70,7 +70,7 @@ export function HeaderComp({ session, city }: HeaderCompProps) {
                                     <Image width={24} height={24} src={'/static/icons/heart_ghosted.svg'} alt="Header-Favorite" className="opacity-80" />
                                     <span className="text-base tracking-wide">Избранное</span>
                                 </button>
-                                <button onClick={() => router.push('/tickets')} className="flex items-center gap-2 cursor-pointer text-muted-foreground hover:text-foreground transition-colors font-medium">
+                                <button onClick={() => router.push('/profile/tickets')} className="flex items-center gap-2 cursor-pointer text-muted-foreground hover:text-foreground transition-colors font-medium">
                                     <Image width={24} height={24} src={'/static/icons/ticket.svg'} alt="Header-Ticket" className="opacity-80" />
                                     <span className="text-base tracking-wide">Мои билеты</span>
                                 </button>

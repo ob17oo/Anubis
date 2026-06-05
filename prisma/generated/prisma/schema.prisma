@@ -139,7 +139,9 @@ model Notification {
 
 enum OrderStatus {
   PENDING
+  PROCESSING
   PAID
+  FAILED
   CANCELLED
   REFUNDED
 }
@@ -165,8 +167,10 @@ model Order {
 
 enum PaymentStatus {
   PENDING
-  COMPLETED
+  PROCESSING
+  PAID
   FAILED
+  CANCELLED
   REFUNDED
 }
 
