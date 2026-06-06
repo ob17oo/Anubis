@@ -128,11 +128,15 @@ export function EventsView(props: EventsViewProps) {
         }
 
         return (
-            <EventCarouselSection
-                events={sorted}
-                title={props.section.title}
-                subtitle="все события категории"
-            />
+            <section className="flex flex-col gap-6">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <h2 className="text-3xl font-heading font-bold tracking-tight">{props.section.title}</h2>
+                    <span className="text-sm text-muted-foreground whitespace-nowrap">
+                        Всего событий: {sorted.length}
+                    </span>
+                </div>
+                <EventsGrid events={sorted} />
+            </section>
         )
     }
 

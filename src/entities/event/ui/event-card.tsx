@@ -16,7 +16,6 @@ export function EventCard({event}:EventCardProps){
                     src={event.imageUrl} 
                     alt={event.title}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-80" />
                 
                 <div className="absolute top-4 right-4 z-10">
                     <FavoriteButton eventId={event.id} initialIsFavorite={false} />
@@ -28,15 +27,15 @@ export function EventCard({event}:EventCardProps){
                     </span>
                 </div>
                 
-                <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-2">
-                    <h3 className="text-xl sm:text-2xl font-heading font-bold leading-tight text-foreground line-clamp-2">
+                <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                    <h3 className="text-xl sm:text-2xl font-heading font-bold leading-tight text-white line-clamp-2 drop-shadow-md">
                         {event.title}
                     </h3>
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 items-center text-sm font-medium text-muted-foreground mt-1">
-                        <span className="flex items-center gap-1.5">
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 items-center text-sm font-medium text-white mt-1 drop-shadow-md">
+                        <span className="flex items-center gap-1.5 text-primary font-bold">
                             {eventDate.toLocaleDateString(`ru-RU`, { day: 'numeric', month: 'short' })}
                         </span>
-                        <span className="w-1 h-1 rounded-full bg-border" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
                         <span className="flex items-center gap-1.5 truncate">
                             {event.location}
                         </span>
