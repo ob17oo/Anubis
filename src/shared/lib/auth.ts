@@ -208,38 +208,7 @@ export const authOption: NextAuthOptions = {
             // Optional telemetry or logging can be added here
         }
     },
-    cookies: {
-        sessionToken: {
-            name: 'next-auth.session-token',
-            options: {
-                httpOnly: true,
-                sameSite: 'lax',
-                path: '/',
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: 7 * 24 * 60 * 60
-            }
-        },
-        callbackUrl: {
-            name: 'next-auth.callback-url',
-            options: {
-                httpOnly: true,
-                sameSite: 'lax',
-                path: '/',
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: 7 * 24 * 60 * 60
-            }
-        },
-        csrfToken: {
-            name: 'next-auth.csrf-token',
-            options: {
-                httpOnly: true,
-                sameSite: 'lax',
-                path: '/',
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: 7 * 24 * 60 * 60
-            }
-        },
-    },
+
     debug: process.env.NODE_ENV === 'development',
     secret: process.env.AUTH_SECRET
 }
