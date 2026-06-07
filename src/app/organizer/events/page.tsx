@@ -26,7 +26,7 @@ export default async function OrganizerEventsPage() {
                 </Link>
             </div>
 
-            <div className="glass-panel rounded-xl overflow-hidden">
+            <div className="glass-panel rounded-xl overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="border-b border-border bg-secondary/50">

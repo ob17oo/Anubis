@@ -9,7 +9,7 @@ import { authOption } from "@/shared/lib/auth"
 import { CheckoutButton } from "@/features/payment/stripe/ui/CheckoutButton"
 
 type PageProps = {
-  searchParams: Promise<{ eventId?: string; quantity?: string }>
+  searchParams: Promise<{ eventId?: string; ticketTypeId?: string; quantity?: string }>
 }
 
 export default async function CheckoutPage({ searchParams }: PageProps) {
@@ -18,9 +18,9 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
     redirect('/login')
   }
 
-  const { eventId, quantity: quantityParam } = await searchParams
+  const { eventId, ticketTypeId, quantity: quantityParam } = await searchParams
 
-  if (!eventId) {
+  if (!eventId || !ticketTypeId) {
     notFound()
   }
 
@@ -34,18 +34,28 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
     where: { id: eventId }
   })
 
-  if (!event || event.ticketAmount < quantity) {
+  const ticketType = await prisma.ticketType.findUnique({
+    where: { id: ticketTypeId }
+  })
+
+  if (!event || !ticketType || ticketType.eventId !== eventId) {
     notFound()
   }
 
-  const subtotal = event.price * quantity
+  const availableAmount = ticketType.capacity - ticketType.soldCount;
+
+  if (availableAmount < quantity) {
+    notFound()
+  }
+
+  const subtotal = ticketType.price * quantity
   // Example service fee logic - can be 0 or a fixed percentage
   const serviceFee = 0 
   const total = subtotal + serviceFee
 
   return (
-    <main className="py-10 w-[90%] max-w-[1000px] mx-auto animate-in fade-in duration-500">
-      <h1 className="text-3xl font-heading font-bold mb-8 text-foreground">
+    <main className="py-6 sm:py-10 w-full max-w-[1000px] mx-auto animate-in fade-in duration-500">
+      <h1 className="text-2xl sm:text-3xl font-heading font-bold mb-6 sm:mb-8 text-foreground">
         Оформление заказа
       </h1>
 
@@ -123,7 +133,7 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
              </div>
 
              <div className="relative z-10">
-               <CheckoutButton eventId={event.id} quantity={quantity} />
+               <CheckoutButton eventId={event.id} ticketTypeId={ticketType.id} quantity={quantity} />
              </div>
 
              <div className="mt-6 flex items-center gap-3 text-xs text-muted-foreground relative z-10 bg-secondary/30 p-3 rounded-xl border border-border">

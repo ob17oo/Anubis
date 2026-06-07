@@ -6,10 +6,11 @@ import { useRouter } from "next/navigation"
 
 interface CheckoutButtonProps {
   eventId: string
+  ticketTypeId: string
   quantity: number
 }
 
-export function CheckoutButton({ eventId, quantity }: CheckoutButtonProps) {
+export function CheckoutButton({ eventId, ticketTypeId, quantity }: CheckoutButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -24,7 +25,7 @@ export function CheckoutButton({ eventId, quantity }: CheckoutButtonProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ eventId, quantity }),
+        body: JSON.stringify({ eventId, ticketTypeId, quantity }),
       })
 
       const data = await response.json()

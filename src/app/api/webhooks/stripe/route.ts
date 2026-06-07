@@ -36,10 +36,10 @@ export async function POST(req: Request) {
         console.log(`[Stripe Webhook] Received event type: ${event.type}`);
         console.log(`[Stripe Webhook] Session Metadata:`, JSON.stringify(session.metadata));
 
-        const { orderId, eventId, quantity, userId } = session.metadata || {};
+        const { orderId, eventId, ticketTypeId, quantity, userId } = session.metadata || {};
 
-        if (!orderId || !eventId || !quantity || !userId) {
-          const errorMsg = `Missing metadata in checkout session: orderId=${orderId}, eventId=${eventId}, quantity=${quantity}, userId=${userId}`;
+        if (!orderId || !eventId || !ticketTypeId || !quantity || !userId) {
+          const errorMsg = `Missing metadata in checkout session: orderId=${orderId}, eventId=${eventId}, ticketTypeId=${ticketTypeId}, quantity=${quantity}, userId=${userId}`;
           console.error(`[Stripe Webhook] ${errorMsg}`);
           throw new Error(errorMsg);
         }
@@ -87,20 +87,21 @@ export async function POST(req: Request) {
           });
           console.log(`[Stripe Webhook] Updated Order status to PAID:`, JSON.stringify(updatedOrder));
 
-          // Deduct ticket amount from Event
-          const updatedEvent = await tx.event.update({
-            where: { id: eventId },
+          // Increment soldCount on TicketType
+          const updatedTicketType = await tx.ticketType.update({
+            where: { id: ticketTypeId },
             data: {
-              ticketAmount: { decrement: parseInt(quantity, 10) },
+              soldCount: { increment: parseInt(quantity, 10) },
             },
           });
-          console.log(`[Stripe Webhook] Decremented Event ticket amount:`, JSON.stringify(updatedEvent));
+          console.log(`[Stripe Webhook] Incremented TicketType soldCount:`, JSON.stringify(updatedTicketType));
 
           // 6. Create Ticket and 7. Link Ticket to User
           const ticket = await tx.ticket.create({
             data: {
               userId,
               eventId,
+              ticketTypeId,
               orderId,
               quantity: parseInt(quantity, 10),
               totalPrice: order.totalAmount,

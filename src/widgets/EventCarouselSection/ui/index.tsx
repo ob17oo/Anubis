@@ -68,7 +68,7 @@ export function EventCarouselSection({
             </div>
 
             <Carousel
-                className="mt-6 px-4 sm:px-10 md:px-12"
+                className="mt-6 sm:px-10 md:px-12"
                 opts={{ align: "start", loop: items.length > 1 }}
             >
                 <CarouselContent className="-ml-3 md:-ml-4">
@@ -88,8 +88,8 @@ export function EventCarouselSection({
                 </CarouselContent>
                 {items.length > 1 && (
                     <>
-                        <CarouselPrevious className="-left-2 sm:-left-3 border-border bg-surface hover:bg-muted" />
-                        <CarouselNext className="-right-2 sm:-right-3 border-border bg-surface hover:bg-muted" />
+                        <CarouselPrevious className="hidden sm:inline-flex -left-2 sm:-left-3 border-border bg-surface hover:bg-muted" />
+                        <CarouselNext className="hidden sm:inline-flex -right-2 sm:-right-3 border-border bg-surface hover:bg-muted" />
                     </>
                 )}
             </Carousel>

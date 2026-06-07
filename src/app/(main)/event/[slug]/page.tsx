@@ -41,10 +41,10 @@ export default async function EventPage({ params }: PageProps) {
   }
 
   return (
-    <main className="py-10 w-[90%] max-w-[1400px] mx-auto animate-in fade-in duration-500">
-      <section className="grid grid-cols-1 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] gap-10">
-        <div className="flex flex-col gap-8">
-          <div className="relative w-full aspect-video rounded-3xl overflow-hidden glass-panel group shadow-2xl">
+    <main className="py-6 sm:py-10 w-full max-w-[1400px] mx-auto animate-in fade-in duration-500">
+      <section className="grid grid-cols-1 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] gap-6 sm:gap-10">
+        <div className="flex flex-col gap-6 sm:gap-8">
+          <div className="relative -mx-3 sm:mx-0 aspect-[4/5] sm:aspect-video rounded-none sm:rounded-3xl overflow-hidden sm:glass-panel group sm:shadow-2xl">
             <EventImage
               src={event.imageUrl}
               alt={event.title}
@@ -53,17 +53,17 @@ export default async function EventPage({ params }: PageProps) {
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-            <div className="absolute top-6 left-6 flex gap-2">
-                <span className="px-3 py-1 bg-primary/80 backdrop-blur-md rounded-full text-white text-sm font-medium uppercase tracking-wide">
+            <div className="absolute top-4 sm:top-6 left-3 sm:left-6 flex flex-wrap gap-2 pr-16 sm:pr-20">
+                <span className="px-3 py-1 bg-primary/80 backdrop-blur-md rounded-full text-white text-xs sm:text-sm font-medium uppercase tracking-wide shadow-sm">
                     {event.genre}
                 </span>
                 {event.ageRestriction && (
-                    <span className="px-3 py-1 bg-background/80 backdrop-blur-md rounded-full text-foreground text-sm font-medium border border-border">
+                    <span className="px-3 py-1 bg-background/80 backdrop-blur-md rounded-full text-foreground text-xs sm:text-sm font-medium border border-border shadow-sm">
                         {event.ageRestriction}
                     </span>
                 )}
             </div>
-            <div className="absolute top-6 right-6 z-10">
+            <div className="absolute top-4 sm:top-6 right-3 sm:right-6 z-10">
                 <FavoriteButton 
                     eventId={event.id} 
                     initialIsFavorite={initialIsFavorite} 
@@ -170,23 +170,11 @@ export default async function EventPage({ params }: PageProps) {
             
             <p className="label-text relative z-10 text-primary">Покупка билета</p>
             
-            <div className="flex items-end justify-between gap-4 relative z-10">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Стоимость</p>
-                <p className="text-4xl font-heading font-bold text-foreground">{event.price} ₽</p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground mb-1">Осталось</p>
-                <p className="text-xl font-medium text-accent">{event.ticketAmount} шт.</p>
-              </div>
-            </div>
-
             <div className="relative z-10">
               <BuyTicketButton
                 eventId={event.id}
                 eventSlug={eventToSlug({ id: event.id, title: event.title })}
-                price={event.price}
-                ticketAmount={event.ticketAmount}
+                ticketTypes={event.ticketTypes || []}
               />
             </div>
 

@@ -11,9 +11,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { eventId, quantity } = await req.json();
+    const { eventId, ticketTypeId, quantity } = await req.json();
 
-    if (!eventId || !quantity || quantity < 1) {
+    if (!eventId || !ticketTypeId || !quantity || quantity < 1) {
       return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
     }
 
@@ -25,11 +25,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Event not found' }, { status: 404 });
     }
 
-    if (event.ticketAmount < quantity) {
-      return NextResponse.json({ error: 'Not enough tickets available' }, { status: 400 });
+    const ticketType = await prisma.ticketType.findUnique({
+      where: { id: ticketTypeId },
+    });
+
+    if (!ticketType || ticketType.eventId !== eventId) {
+      return NextResponse.json({ error: 'Invalid ticket type' }, { status: 400 });
     }
 
-    const totalAmount = event.price * quantity;
+    const availableTickets = ticketType.capacity - ticketType.soldCount;
+    if (availableTickets < quantity) {
+      return NextResponse.json({ error: 'Not enough tickets available in this category' }, { status: 400 });
+    }
+
+    const totalAmount = ticketType.price * quantity;
 
     // Create Order
     const order = await prisma.order.create({
@@ -60,11 +69,11 @@ export async function POST(req: Request) {
           price_data: {
             currency: 'rub',
             product_data: {
-              name: `Билет: ${event.title}`,
+              name: `Билет: ${event.title} (${ticketType.name})`,
               description: `${event.location} - ${event.date.toISOString().split('T')[0]}`,
               images: [event.imageUrl],
             },
-            unit_amount: event.price * 100, // Stripe expects amount in cents/kopecks
+            unit_amount: ticketType.price * 100, // Stripe expects amount in cents/kopecks
           },
           quantity,
         },
@@ -76,6 +85,7 @@ export async function POST(req: Request) {
       metadata: {
         orderId: order.id,
         eventId: event.id,
+        ticketTypeId: ticketType.id,
         quantity: quantity.toString(),
         userId: session.user.id,
       },

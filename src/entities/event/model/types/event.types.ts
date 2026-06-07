@@ -14,4 +14,12 @@ export interface TEvent {
     updatedAt?: Date | null,
 
     rating: number,
+    ticketTypes?: {
+        id: string;
+        name: string;
+        description: string | null;
+        price: number;
+        capacity: number;
+        soldCount: number;
+    }[]
 }

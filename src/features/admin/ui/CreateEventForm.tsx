@@ -151,10 +151,13 @@ export function CreateEventForm() {
           className={`w-full rounded-2xl bg-surface border px-5 py-4 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${errors.genre ? "border-destructive focus:ring-destructive/50" : "border-border"}`}
         >
           <option value="concert">Концерт</option>
+          <option value="festival">Фестиваль</option>
           <option value="theater">Театр</option>
           <option value="cinema">Кино</option>
           <option value="standup">Стендап</option>
           <option value="sport">Спорт</option>
+          <option value="exhibition">Выставка</option>
+          <option value="conference">Конференция</option>
           <option value="kids">Детям</option>
         </select>
         {errors.genre && <p className="text-destructive text-sm">{errors.genre.message}</p>}

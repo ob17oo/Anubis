@@ -12,6 +12,9 @@ model Ticket {
   eventId String @map("event_id")
   event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
+  ticketTypeId String?     @map("ticket_type_id")
+  ticketType   TicketType? @relation(fields: [ticketTypeId], references: [id], onDelete: Restrict)
+
   orderId String? @map("order_id")
   order   Order?  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 

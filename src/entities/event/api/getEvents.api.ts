@@ -50,6 +50,7 @@ export async function getEventById(eventId: string) {
     try {
         const event = await prisma.event.findUnique({
             where: { id: eventId },
+            include: { ticketTypes: true },
         })
 
         if (!event) {

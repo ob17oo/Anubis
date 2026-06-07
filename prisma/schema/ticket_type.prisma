@@ -1,0 +1,16 @@
+model TicketType {
+  id          String   @id @default(cuid())
+  eventId     String   @map("event_id")
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  name        String
+  description String?
+  price       Int
+  capacity    Int
+  soldCount   Int      @default(0)
+
+  tickets     Ticket[]
+
+  @@index([eventId])
+  @@map("ticket_types")
+}

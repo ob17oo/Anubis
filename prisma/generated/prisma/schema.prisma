@@ -41,6 +41,9 @@ enum EventType {
   standup
   theater
   sport
+  festival
+  exhibition
+  conference
 }
 
 enum EventStatus {
@@ -83,6 +86,7 @@ model Event {
   organizer   User?   @relation("EventOrganizer", fields: [organizerId], references: [id])
 
   tickets     Ticket[]
+  ticketTypes TicketType[]
   artists     Artist[]     @relation("EventToArtist")
   collections Collection[] @relation("EventToCollection")
   favorites   Favorite[]
@@ -273,6 +277,9 @@ model Ticket {
   eventId String @map("event_id")
   event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
+  ticketTypeId String?     @map("ticket_type_id")
+  ticketType   TicketType? @relation(fields: [ticketTypeId], references: [id], onDelete: Restrict)
+
   orderId String? @map("order_id")
   order   Order?  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
@@ -289,6 +296,23 @@ model Ticket {
   @@index([eventId])
   @@index([userId])
   @@map("tickets")
+}
+
+model TicketType {
+  id      String @id @default(cuid())
+  eventId String @map("event_id")
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?
+  price       Int
+  capacity    Int
+  soldCount   Int     @default(0)
+
+  tickets Ticket[]
+
+  @@index([eventId])
+  @@map("ticket_types")
 }
 
 enum USER_ROLE {

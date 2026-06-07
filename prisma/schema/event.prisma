@@ -5,6 +5,9 @@ enum EventType {
   standup
   theater
   sport
+  festival
+  exhibition
+  conference
 }
 
 enum EventStatus {
@@ -47,6 +50,7 @@ model Event {
   organizer      User?       @relation("EventOrganizer", fields: [organizerId], references: [id])
 
   tickets     Ticket[]
+  ticketTypes TicketType[]
   artists     Artist[]     @relation("EventToArtist")
   collections Collection[] @relation("EventToCollection")
   favorites   Favorite[]

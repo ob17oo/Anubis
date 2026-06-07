@@ -237,12 +237,23 @@ exports.Prisma.TicketScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   eventId: 'eventId',
+  ticketTypeId: 'ticketTypeId',
   orderId: 'orderId',
   quantity: 'quantity',
   totalPrice: 'totalPrice',
   status: 'status',
   createdAt: 'createdAt',
   qrCode: 'qrCode'
+};
+
+exports.Prisma.TicketTypeScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  name: 'name',
+  description: 'description',
+  price: 'price',
+  capacity: 'capacity',
+  soldCount: 'soldCount'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -285,7 +296,10 @@ exports.EventType = exports.$Enums.EventType = {
   kids: 'kids',
   standup: 'standup',
   theater: 'theater',
-  sport: 'sport'
+  sport: 'sport',
+  festival: 'festival',
+  exhibition: 'exhibition',
+  conference: 'conference'
 };
 
 exports.EventStatus = exports.$Enums.EventStatus = {
@@ -351,6 +365,7 @@ exports.Prisma.ModelName = {
   RefundRequest: 'RefundRequest',
   Review: 'Review',
   Ticket: 'Ticket',
+  TicketType: 'TicketType',
   User: 'User',
   Venue: 'Venue'
 };
