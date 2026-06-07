@@ -22,14 +22,14 @@ function Calendar({
     month: "space-y-4",
     month_caption: "flex justify-center pt-1 relative items-center mb-4",
     caption_label: "text-sm font-semibold text-foreground",
-    nav: "space-x-1 flex items-center",
+    nav: "flex items-center justify-between w-full absolute bottom-3 left-0 right-0 px-3 z-10 pointer-events-none",
     button_previous: cn(
       buttonVariants({ variant: "ghost", size: "icon-sm" }),
-      "rounded-full absolute left-1 cursor-pointer"
+      "rounded-full cursor-pointer pointer-events-auto"
     ),
     button_next: cn(
       buttonVariants({ variant: "ghost", size: "icon-sm" }),
-      "rounded-full absolute right-1 cursor-pointer"
+      "rounded-full cursor-pointer pointer-events-auto"
     ),
     month_grid: "w-full border-collapse",
     weekdays: "",
@@ -52,7 +52,7 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       locale={locale}
-      className={cn("p-2", className)}
+      className={cn("p-3 pb-14 relative", className)}
       classNames={mergedClassNames}
       components={{
         Chevron: ({ orientation }) =>
