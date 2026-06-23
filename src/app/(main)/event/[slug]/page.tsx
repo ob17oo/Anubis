@@ -11,6 +11,7 @@ import { BuyTicketButton } from "@/features/ticket/purchase/ui/BuyTicketButton"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { FavoriteButton } from "@/features/favorite/ui/FavoriteButton"
 import { ReviewForm } from "@/features/review/ui/ReviewForm"
+import { ReviewList } from "@/features/review/ui/ReviewList"
 import { getServerSession } from "next-auth"
 import { authOption } from "@/shared/lib/auth"
 import { prisma } from "@/shared/lib"
@@ -39,6 +40,22 @@ export default async function EventPage({ params }: PageProps) {
       })
       initialIsFavorite = !!favorite
   }
+
+  // Fetch reviews for the event
+  const reviews = await prisma.review.findMany({
+    where: { eventId: event.id },
+    include: {
+      user: {
+        select: {
+          userName: true,
+          imageUrl: true,
+        }
+      }
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  })
 
   return (
     <main className="py-6 sm:py-10 w-full max-w-[1400px] mx-auto animate-in fade-in duration-500">
@@ -161,6 +178,7 @@ export default async function EventPage({ params }: PageProps) {
             </AccordionItem>
           </Accordion>
 
+          <ReviewList reviews={reviews} averageRating={event.rating} />
           <ReviewForm eventId={event.id} />
         </div>
 
