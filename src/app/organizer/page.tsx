@@ -21,6 +21,17 @@ export default async function OrganizerDashboard() {
         }
     })
 
+    const totalRevenueResult = await prisma.ticket.aggregate({
+        where: {
+            event: { organizerId: session.user.id },
+            status: 'CONFIRMED'
+        },
+        _sum: {
+            totalPrice: true
+        }
+    })
+    const totalRevenue = totalRevenueResult._sum.totalPrice || 0
+
     return (
         <div className="space-y-8 animate-in fade-in">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -38,10 +49,10 @@ export default async function OrganizerDashboard() {
                 </div>
                 <div className="glass-panel p-5 md:p-6 rounded-2xl flex flex-col gap-2">
                     <p className="text-muted-foreground font-medium flex items-center gap-2">
-                        <UsersIcon className="size-5 text-emerald-500" /> Выручка (оценка)
+                        <UsersIcon className="size-5 text-emerald-500" /> Выручка
                     </p>
                     <p className="text-4xl font-bold font-heading">
-                        {events.reduce((acc, curr) => acc + (100 - curr.ticketAmount) * curr.price, 0)} ₽
+                        {totalRevenue} ₽
                     </p>
                 </div>
             </div>
