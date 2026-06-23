@@ -91,6 +91,12 @@ export async function POST(req: Request) {
       },
     });
 
+    // Save the Stripe Session ID as transactionId for later manual or automatic fulfillment
+    await prisma.payment.update({
+      where: { orderId: order.id },
+      data: { transactionId: stripeSession.id },
+    });
+
     return NextResponse.json({ url: stripeSession.url });
   } catch (error) {
     console.error('Stripe checkout error:', error);

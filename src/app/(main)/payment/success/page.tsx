@@ -1,7 +1,22 @@
 import Link from "next/link"
 import { CheckCircleIcon, ArrowRightIcon, TicketIcon } from "lucide-react"
+import { fulfillOrder } from "@/features/payment/stripe/lib/fulfillment"
 
-export default function PaymentSuccessPage() {
+interface PageProps {
+  searchParams: Promise<{ session_id?: string }>
+}
+
+export default async function PaymentSuccessPage({ searchParams }: PageProps) {
+  const { session_id } = await searchParams
+
+  if (session_id) {
+    try {
+      await fulfillOrder(session_id)
+    } catch (error) {
+      console.error("[PaymentSuccessPage] Error fulfilling order:", error)
+    }
+  }
+
   return (
     <main className="min-h-[70vh] flex items-center justify-center py-10 w-[90%] max-w-[600px] mx-auto animate-in fade-in zoom-in duration-500">
       <div className="glass-panel p-10 rounded-3xl text-center flex flex-col items-center gap-6 shadow-2xl relative overflow-hidden w-full">

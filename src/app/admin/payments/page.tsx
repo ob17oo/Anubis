@@ -1,6 +1,7 @@
 import { prisma } from "@/shared/lib"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
+import { ConfirmPaymentButton } from "@/features/admin/ui/ConfirmPaymentButton"
 
 export default async function AdminPaymentsPage() {
   const payments = await prisma.payment.findMany({
@@ -32,12 +33,13 @@ export default async function AdminPaymentsPage() {
                 <th className="px-6 py-4 font-medium">Статус платежа</th>
                 <th className="px-6 py-4 font-medium">Статус заказа</th>
                 <th className="px-6 py-4 font-medium">Дата</th>
+                <th className="px-6 py-4 font-medium text-right">Действия</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {payments.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-10 text-center text-muted-foreground">
+                  <td colSpan={7} className="px-6 py-10 text-center text-muted-foreground">
                     Платежей пока нет
                   </td>
                 </tr>
@@ -73,6 +75,13 @@ export default async function AdminPaymentsPage() {
                   </td>
                   <td className="px-6 py-4 text-muted-foreground">
                     {format(new Date(payment.createdAt), "d MMM yyyy, HH:mm", { locale: ru })}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <ConfirmPaymentButton 
+                      paymentId={payment.id}
+                      paymentStatus={payment.status}
+                      transactionId={payment.transactionId}
+                    />
                   </td>
                 </tr>
               ))}

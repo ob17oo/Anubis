@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { stripe } from '@/shared/lib/stripe';
 import { prisma } from '@/shared/lib';
-import crypto from 'crypto';
+import { fulfillOrder } from '@/features/payment/stripe/lib/fulfillment';
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -34,85 +34,11 @@ export async function POST(req: Request) {
       case 'checkout.session.completed': {
         const session = event.data.object as any;
         console.log(`[Stripe Webhook] Received event type: ${event.type}`);
-        console.log(`[Stripe Webhook] Session Metadata:`, JSON.stringify(session.metadata));
+        console.log(`[Stripe Webhook] Session ID: ${session.id}`);
 
-        const { orderId, eventId, ticketTypeId, quantity, userId } = session.metadata || {};
+        await fulfillOrder(session.id);
 
-        if (!orderId || !eventId || !ticketTypeId || !quantity || !userId) {
-          const errorMsg = `Missing metadata in checkout session: orderId=${orderId}, eventId=${eventId}, ticketTypeId=${ticketTypeId}, quantity=${quantity}, userId=${userId}`;
-          console.error(`[Stripe Webhook] ${errorMsg}`);
-          throw new Error(errorMsg);
-        }
-
-        // 3. Find Order
-        const order = await prisma.order.findUnique({
-          where: { id: orderId },
-        });
-        if (!order) {
-          const errorMsg = `Order with ID ${orderId} not found in database`;
-          console.error(`[Stripe Webhook] ${errorMsg}`);
-          throw new Error(errorMsg);
-        }
-        console.log(`[Stripe Webhook] Found Order in database:`, JSON.stringify(order));
-
-        // 4. Find Payment
-        const payment = await prisma.payment.findUnique({
-          where: { orderId },
-        });
-        if (!payment) {
-          const errorMsg = `Payment with orderId ${orderId} not found in database`;
-          console.error(`[Stripe Webhook] ${errorMsg}`);
-          throw new Error(errorMsg);
-        }
-        console.log(`[Stripe Webhook] Found Payment in database:`, JSON.stringify(payment));
-
-        console.log(`[Stripe Webhook] session.payment_intent: ${session.payment_intent} (type: ${typeof session.payment_intent})`);
-
-        // Perform updates inside a transaction to guarantee atomic execution of all business logic
-        await prisma.$transaction(async (tx) => {
-          // 5. Update Payment status
-          const updatedPayment = await tx.payment.update({
-            where: { orderId },
-            data: {
-              status: 'PAID',
-              transactionId: session.payment_intent as string,
-            },
-          });
-          console.log(`[Stripe Webhook] Updated Payment status to PAID:`, JSON.stringify(updatedPayment));
-
-          // Update Order status
-          const updatedOrder = await tx.order.update({
-            where: { id: orderId },
-            data: { status: 'PAID' },
-          });
-          console.log(`[Stripe Webhook] Updated Order status to PAID:`, JSON.stringify(updatedOrder));
-
-          // Increment soldCount on TicketType
-          const updatedTicketType = await tx.ticketType.update({
-            where: { id: ticketTypeId },
-            data: {
-              soldCount: { increment: parseInt(quantity, 10) },
-            },
-          });
-          console.log(`[Stripe Webhook] Incremented TicketType soldCount:`, JSON.stringify(updatedTicketType));
-
-          // 6. Create Ticket and 7. Link Ticket to User
-          const ticket = await tx.ticket.create({
-            data: {
-              userId,
-              eventId,
-              ticketTypeId,
-              orderId,
-              quantity: parseInt(quantity, 10),
-              totalPrice: order.totalAmount,
-              status: 'CONFIRMED',
-              qrCode: crypto.randomUUID(), // Generate a mock QR code string
-            },
-          });
-          console.log(`[Stripe Webhook] Created Ticket and linked to User ${userId}:`, JSON.stringify(ticket));
-        });
-
-        console.log(`[Stripe Webhook] Checkout session processing completed successfully for order ${orderId}`);
+        console.log(`[Stripe Webhook] Checkout session processing completed successfully for session ${session.id}`);
         break;
       }
 
